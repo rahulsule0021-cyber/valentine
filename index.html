@@ -21,20 +21,6 @@ body {
   align-items: center;
 }
 
-/* Floating background hearts */
-.heart {
-  position: fixed;
-  animation: floatUp 8s linear infinite;
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(100vh); opacity: 0; }
-  10% { opacity: 0.6; }
-  100% { transform: translateY(-10vh); opacity: 0; }
-}
-
 /* Card */
 .card {
   background: white;
@@ -64,18 +50,25 @@ h2 {
   margin: 10px auto 14px;
 }
 
-.cat {
-  width: 100%;
+/* movement wrapper */
+.cat-motion {
   animation: bounce 2.5s ease-in-out infinite;
 }
 
+/* pure image */
+.cat {
+  width: 100%;
+  display: block;
+}
+
+/* bounce */
 @keyframes bounce {
   0% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
   100% { transform: translateY(0); }
 }
 
-/* Blush */
+/* blush */
 .blush {
   position: absolute;
   width: 18px;
@@ -89,7 +82,7 @@ h2 {
 .blush.left { left: 18%; }
 .blush.right { right: 18%; }
 
-/* Rose */
+/* rose */
 .rose {
   position: absolute;
   width: 28px;
@@ -99,12 +92,12 @@ h2 {
   transition: transform 0.6s ease, opacity 0.6s;
 }
 
-/* DRAMA MODE */
+/* DRAMATIC MODE */
 .dramatic .blush {
   opacity: 0.7;
 }
 
-.dramatic .cat {
+.dramatic .cat-motion {
   animation: shake 0.4s infinite;
 }
 
@@ -121,7 +114,7 @@ h2 {
   100% { transform: translateX(0); }
 }
 
-/* Buttons */
+/* buttons */
 .buttons {
   position: relative;
   height: 90px;
@@ -149,7 +142,7 @@ button {
   top: 45px;
 }
 
-/* Result */
+/* result */
 .result {
   display: none;
   animation: pop 0.6s ease;
@@ -160,7 +153,7 @@ button {
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Sparkle hearts */
+/* sparkle hearts */
 .spark {
   position: fixed;
   font-size: 20px;
@@ -184,13 +177,16 @@ button {
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
+<!-- FIRST CARD -->
 <div class="card" id="card">
   <h2>Disha, will you be my Valentine? 💕</h2>
   <div class="subtext">I have a feeling you’ll say yes 😊</div>
 
   <div class="cat-wrap" id="catWrap">
-    <img src="cat-rose.png" class="cat">
-    <img src="rose.png" class="rose">
+    <div class="cat-motion">
+      <img src="cat-rose.png" class="cat" alt="Cute cat">
+    </div>
+    <img src="rose.png" class="rose" alt="Rose">
     <div class="blush left"></div>
     <div class="blush right"></div>
   </div>
@@ -201,9 +197,10 @@ button {
   </div>
 </div>
 
+<!-- RESULT CARD -->
 <div class="card result" id="result">
   <h2>You made my day 💘</h2>
-  <img src="valentine.png" style="width:100%; border-radius:16px;">
+  <img src="valentine.png" style="width:100%;border-radius:16px;">
   <div style="margin-top:10px;color:#ff3f8e;">Can’t wait to see you ❤️</div>
 </div>
 
@@ -215,6 +212,13 @@ const card = document.getElementById("card");
 const result = document.getElementById("result");
 const music = document.getElementById("bgMusic");
 
+/* NO button drama */
+function moveNo() {
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 120 - 60;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+}
+
 noBtn.addEventListener("mouseover", () => {
   catWrap.classList.add("dramatic");
   moveNo();
@@ -224,12 +228,7 @@ noBtn.addEventListener("mouseleave", () => {
   catWrap.classList.remove("dramatic");
 });
 
-function moveNo() {
-  const x = Math.random() * 200 - 100;
-  const y = Math.random() * 120 - 60;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
-}
-
+/* YES click */
 yesBtn.addEventListener("click", () => {
   explodeHearts();
   setTimeout(() => {
@@ -240,8 +239,9 @@ yesBtn.addEventListener("click", () => {
   }, 700);
 });
 
+/* heart explosion */
 function explodeHearts() {
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 20; i++) {
     const heart = document.createElement("div");
     heart.className = "spark";
     heart.innerText = "💖";
@@ -257,3 +257,4 @@ function explodeHearts() {
 
 </body>
 </html>
+
