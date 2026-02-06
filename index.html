@@ -6,108 +6,107 @@
 <title>Valentine 💖</title>
 
 <style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
 body {
   margin: 0;
   height: 100vh;
   background: #ffd6e8;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
 }
 
+/* CARD */
 .card {
   background: white;
-  padding: 20px;
+  padding: 22px;
   border-radius: 18px;
   text-align: center;
   width: 90%;
-  max-width: 340px;
+  max-width: 360px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  z-index: 10;
 }
 
 h2 {
   color: #ff3f8e;
+  font-size: 1.4rem;
 }
 
 .subtext {
   color: #777;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-/* CAT (no images, no emoji) */
-.cat {
-  width: 120px;
-  height: 140px;
-  background: #ffc1d9;
-  border-radius: 60px 60px 40px 40px;
-  margin: 12px auto;
+/* CAT WRAPPER (ONLY THIS MOVES) */
+.cat-wrap {
+  width: 160px;
+  margin: 10px auto 18px;
   position: relative;
 }
 
-/* eyes */
-.eye {
-  width: 10px;
-  height: 10px;
-  background: #333;
-  border-radius: 50%;
-  position: absolute;
-  top: 45px;
+/* IMAGE ITSELF NEVER MOVES */
+.cat-img {
+  width: 100%;
+  display: block;
 }
 
-.eye.left { left: 35px; }
-.eye.right { right: 35px; }
+/* ROSE DROP */
+.rose {
+  position: absolute;
+  font-size: 26px;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.6s ease, opacity 0.6s;
+}
 
-/* blush */
+/* BLUSH */
 .blush {
+  position: absolute;
   width: 14px;
   height: 8px;
   background: #ff6fa5;
   border-radius: 50%;
-  position: absolute;
-  top: 65px;
   opacity: 0;
+  top: 72px;
 }
 
-.blush.left { left: 25px; }
-.blush.right { right: 25px; }
+.blush.left { left: 40px; }
+.blush.right { right: 40px; }
 
-/* rose */
-.rose {
-  width: 10px;
-  height: 40px;
-  background: green;
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
+/* DRAMA MODE */
+.dramatic {
+  animation: shake 0.4s infinite;
 }
 
-.rose::before {
-  content: "";
-  width: 20px;
-  height: 20px;
-  background: red;
-  border-radius: 50%;
-  position: absolute;
-  top: -15px;
-  left: -5px;
-}
-
-/* DRAMA */
 .dramatic .blush {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .dramatic .rose {
-  display: none;
+  transform: translate(-50%, 120px) rotate(45deg);
+  opacity: 0;
 }
 
-/* buttons */
+/* SHAKE */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+/* BUTTONS */
 .buttons {
-  margin-top: 20px;
   position: relative;
-  height: 80px;
+  height: 90px;
 }
 
 button {
@@ -129,28 +128,50 @@ button {
   padding: 8px 14px;
   position: absolute;
   right: 10px;
-  top: 40px;
+  top: 45px;
 }
 
 /* RESULT */
 .result {
   display: none;
+  animation: pop 0.6s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* HEART EXPLOSION */
+.spark {
+  position: fixed;
+  font-size: 22px;
+  animation: explode 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes explode {
+  0% { transform: scale(0); opacity: 1; }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(1.4);
+    opacity: 0;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- FIRST PAGE -->
 <div class="card" id="card">
   <h2>Disha, will you be my Valentine? 💕</h2>
   <div class="subtext">I have a feeling you’ll say yes 😊</div>
 
-  <div class="cat" id="cat">
-    <div class="eye left"></div>
-    <div class="eye right"></div>
+  <div class="cat-wrap" id="catWrap">
+    <img src="cat-rose.png" class="cat-img" alt="Cute cat">
+    <div class="rose">🌹</div>
     <div class="blush left"></div>
     <div class="blush right"></div>
-    <div class="rose"></div>
   </div>
 
   <div class="buttons">
@@ -159,31 +180,57 @@ button {
   </div>
 </div>
 
+<!-- SECOND PAGE (UNCHANGED IMAGE) -->
 <div class="card result" id="result">
   <h2>You made my day 💘</h2>
-  <p>Can’t wait to see you ❤️</p>
+  <img src="valentine.png" alt="Us together" style="width:100%;border-radius:16px;margin-top:12px;">
+  <div style="margin-top:10px;color:#ff3f8e;">Can’t wait to see you ❤️</div>
 </div>
 
 <script>
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
-const cat = document.getElementById("cat");
+const catWrap = document.getElementById("catWrap");
 const card = document.getElementById("card");
 const result = document.getElementById("result");
 
+/* NO = DRAMA */
+function moveNo() {
+  noBtn.style.transform =
+    `translate(${Math.random()*180-90}px, ${Math.random()*100-50}px)`;
+}
+
 noBtn.addEventListener("mouseover", () => {
-  cat.classList.add("dramatic");
-  noBtn.style.transform = `translate(${Math.random()*120-60}px, ${Math.random()*80-40}px)`;
+  catWrap.classList.add("dramatic");
+  moveNo();
 });
 
 noBtn.addEventListener("mouseleave", () => {
-  cat.classList.remove("dramatic");
+  catWrap.classList.remove("dramatic");
 });
 
+/* YES = LOVE */
 yesBtn.addEventListener("click", () => {
-  card.style.display = "none";
-  result.style.display = "block";
+  explodeHearts();
+  setTimeout(() => {
+    card.style.display = "none";
+    result.style.display = "block";
+  }, 700);
 });
+
+function explodeHearts() {
+  for (let i = 0; i < 20; i++) {
+    const h = document.createElement("div");
+    h.className = "spark";
+    h.innerText = "💖";
+    h.style.left = "50%";
+    h.style.top = "50%";
+    h.style.setProperty("--x", `${Math.random()*300-150}px`);
+    h.style.setProperty("--y", `${Math.random()*300-150}px`);
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1000);
+  }
+}
 </script>
 
 </body>
