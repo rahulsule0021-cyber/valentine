@@ -21,7 +21,7 @@ body {
   align-items: center;
 }
 
-/* Card */
+/* CARD */
 .card {
   background: white;
   padding: 22px;
@@ -43,78 +43,73 @@ h2 {
   margin-bottom: 10px;
 }
 
-/* CAT AREA */
+/* CAT */
 .cat-wrap {
   position: relative;
-  width: 140px;
-  margin: 10px auto 14px;
+  width: 120px;
+  height: 150px;
+  margin: 10px auto 20px;
 }
 
-/* movement wrapper */
-.cat-motion {
-  animation: bounce 2.5s ease-in-out infinite;
-}
-
-/* pure image */
 .cat {
-  width: 100%;
-  display: block;
-}
-
-/* bounce */
-@keyframes bounce {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
+  font-size: 96px;
+  animation: float 2.5s ease-in-out infinite;
 }
 
 /* blush */
 .blush {
   position: absolute;
-  width: 18px;
-  height: 10px;
+  width: 14px;
+  height: 8px;
   background: #ff6fa5;
   border-radius: 50%;
   opacity: 0;
-  top: 62%;
+  top: 78px;
 }
 
-.blush.left { left: 18%; }
-.blush.right { right: 18%; }
+.blush.left { left: 22px; }
+.blush.right { right: 22px; }
 
 /* rose */
 .rose {
   position: absolute;
-  width: 28px;
-  bottom: 12px;
+  font-size: 26px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   transition: transform 0.6s ease, opacity 0.6s;
 }
 
-/* DRAMATIC MODE */
+/* DRAMA MODE */
 .dramatic .blush {
   opacity: 0.7;
 }
 
-.dramatic .cat-motion {
+.dramatic .cat {
   animation: shake 0.4s infinite;
 }
 
 .dramatic .rose {
-  transform: translate(-50%, 120px) rotate(40deg);
+  transform: translate(-50%, 140px) rotate(50deg);
   opacity: 0;
+}
+
+/* animations */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
 }
 
 @keyframes shake {
   0% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  50% { transform: translateX(2px); }
-  75% { transform: translateX(-2px); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
   100% { transform: translateX(0); }
 }
 
-/* buttons */
+/* BUTTONS */
 .buttons {
   position: relative;
   height: 90px;
@@ -142,7 +137,7 @@ button {
   top: 45px;
 }
 
-/* result */
+/* RESULT */
 .result {
   display: none;
   animation: pop 0.6s ease;
@@ -153,10 +148,10 @@ button {
   to { transform: scale(1); opacity: 1; }
 }
 
-/* sparkle hearts */
+/* HEART EXPLOSION */
 .spark {
   position: fixed;
-  font-size: 20px;
+  font-size: 22px;
   animation: explode 1s ease-out forwards;
   pointer-events: none;
 }
@@ -164,7 +159,7 @@ button {
 @keyframes explode {
   0% { transform: scale(0); opacity: 1; }
   100% {
-    transform: translate(var(--x), var(--y)) scale(1.4);
+    transform: translate(var(--x), var(--y)) scale(1.5);
     opacity: 0;
   }
 }
@@ -183,10 +178,8 @@ button {
   <div class="subtext">I have a feeling you’ll say yes 😊</div>
 
   <div class="cat-wrap" id="catWrap">
-    <div class="cat-motion">
-      <img src="cat-rose.png" class="cat" alt="Cute cat">
-    </div>
-    <img src="rose.png" class="rose" alt="Rose">
+    <div class="cat">🐱</div>
+    <div class="rose">🌹</div>
     <div class="blush left"></div>
     <div class="blush right"></div>
   </div>
@@ -197,10 +190,10 @@ button {
   </div>
 </div>
 
-<!-- RESULT CARD -->
+<!-- RESULT -->
 <div class="card result" id="result">
   <h2>You made my day 💘</h2>
-  <img src="valentine.png" style="width:100%;border-radius:16px;">
+  <div style="font-size:80px;">💑</div>
   <div style="margin-top:10px;color:#ff3f8e;">Can’t wait to see you ❤️</div>
 </div>
 
@@ -212,7 +205,7 @@ const card = document.getElementById("card");
 const result = document.getElementById("result");
 const music = document.getElementById("bgMusic");
 
-/* NO button drama */
+/* NO drama */
 function moveNo() {
   const x = Math.random() * 200 - 100;
   const y = Math.random() * 120 - 60;
@@ -228,7 +221,7 @@ noBtn.addEventListener("mouseleave", () => {
   catWrap.classList.remove("dramatic");
 });
 
-/* YES click */
+/* YES */
 yesBtn.addEventListener("click", () => {
   explodeHearts();
   setTimeout(() => {
@@ -241,14 +234,14 @@ yesBtn.addEventListener("click", () => {
 
 /* heart explosion */
 function explodeHearts() {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 22; i++) {
     const heart = document.createElement("div");
     heart.className = "spark";
     heart.innerText = "💖";
     heart.style.left = "50%";
     heart.style.top = "50%";
-    heart.style.setProperty("--x", `${Math.random()*300-150}px`);
-    heart.style.setProperty("--y", `${Math.random()*300-150}px`);
+    heart.style.setProperty("--x", `${Math.random()*320-160}px`);
+    heart.style.setProperty("--y", `${Math.random()*320-160}px`);
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 1000);
   }
@@ -257,4 +250,3 @@ function explodeHearts() {
 
 </body>
 </html>
-
